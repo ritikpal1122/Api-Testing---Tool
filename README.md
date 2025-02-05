@@ -31,7 +31,7 @@ npm install  # or npm install
 ## 💻 Usage
 ```bash
 # Start the development server
-npm run dev  # or npm run dev
+npm run dev 
 ```
 Open your browser and go to `http://localhost:5173`.
 
