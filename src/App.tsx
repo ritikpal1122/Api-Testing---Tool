@@ -138,6 +138,7 @@ function App() {
   };
 
   const addRequest = () => {
+    // if (activeRequests.length >= 10) return;
     setActiveRequests([...activeRequests, {
       method: 'GET',
       url: '',
@@ -145,7 +146,6 @@ function App() {
       body: ''
     }]);
   };
-
   const removeRequest = (index: number) => {
     setActiveRequests(activeRequests.filter((_, i) => i !== index));
     setResponses(prev => {
@@ -187,9 +187,9 @@ function App() {
             </div>
             <a href="https://x.com/ritikpaltech" target="_blank" rel="noopener noreferrer">
               <span className="h-8 w-8 bg-red" >
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-twitter-x" viewBox="0 0 16 16">
-  <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865z"/>
-</svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-twitter-x" viewBox="0 0 16 16">
+                  <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865z" />
+                </svg>
               </span>
             </a>
 
@@ -197,7 +197,7 @@ function App() {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
+      <main className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 pb-24">
         <div className="space-y-6">
           <div className="space-y-4">
             {activeRequests.map((request, index) => (
@@ -232,10 +232,10 @@ function App() {
             <div className="flex justify-between items-center">
               <button
                 onClick={addRequest}
-                className="px-4 py-2 text-primary hover:text-primary-dark flex items-center space-x-2"
+                className={`px-4 py-2 text-primary hover:text-primary-dark flex items-center space-x-2 ${activeRequests.length >= 10 ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 <Plus size={16} />
-                <span>Add Request</span>
+                <span>Add Request </span>
               </button>
 
               {activeRequests.length > 1 && (
@@ -274,8 +274,8 @@ function App() {
                       handleSend(saved.request, index);
                     }}
                     className={`w-full text-left p-3 rounded-md transition-colors ${selectedRequest?.id === saved.id
-                        ? 'bg-primary/10 border border-primary/20'
-                        : 'hover:bg-secondary'
+                      ? 'bg-primary/10 border border-primary/20'
+                      : 'hover:bg-secondary'
                       }`}
                   >
                     <div className="font-medium text-white">
