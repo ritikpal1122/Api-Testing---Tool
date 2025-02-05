@@ -48,7 +48,7 @@ export function RequestPanel({ request: initialRequest, onSend, onSave }: Reques
           value={url}
           onChange={(e) => setUrl(e.target.value)}
           placeholder="Enter URL"
-          className="flex-1 px-4 py-2 bg-secondary border border-gray-700 rounded-md text-white focus:border-primary focus:ring-1 focus:ring-primary"
+          className="flex-1 px-4 py-2 bg-secondary border w-full border-gray-700 rounded-md text-white focus:border-primary focus:ring-1 focus:ring-primary"
         />
       </div>
 
