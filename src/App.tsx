@@ -4,7 +4,7 @@ import { RequestPanel } from './components/RequestPanel';
 import { ResponsePanel } from './components/ResponsePanel';
 import { DocumentationPanel } from './components/DocumentationPanel';
 import { ComparisonPanel } from './components/ComparisonPanel';
-import { Boxes, Github, Plus, ShieldCheck, X } from 'lucide-react';
+import { Boxes, Github, Linkedin, Plus, ShieldCheck, X } from 'lucide-react';
 import type { RequestMethod, ResponseData, SavedRequest, ErrorData, Documentation, ComparisonResult } from './types';
 
 function App() {
@@ -177,12 +177,18 @@ function App() {
       </Helmet>
 
       <header className="bg-secondary-light border-b border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
-          <div className="flex items-center space-x-4">
+        <div className="max-w-7xl mx-auto  px-4 py-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center">
+            <div className='flex items-center space-x-4'>
             <ShieldCheck className="h-8 w-8 text-primary" />
             <h1 className="text-2xl font-bold text-white">
               API Testing Workbench
             </h1>
+            </div>
+            <a href="https://www.linkedin.com/in/ritikpal" target="_blank" rel="noopener noreferrer">
+            <Linkedin className="h-6 w-6 " ></Linkedin>
+            </a>
+
           </div>
         </div>
       </header>

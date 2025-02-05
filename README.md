@@ -33,7 +33,7 @@ npm install  # or npm install
 # Start the development server
 npm run dev  # or npm run dev
 ```
-Open your browser and go to `http://localhost:3000`.
+Open your browser and go to `http://localhost:5173`.
 
 ## 📖 How to Use
 1. **Enter API URL**: Type the endpoint you want to test.
