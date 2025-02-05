@@ -28,7 +28,7 @@ function App() {
       }
 
       const startTime = performance.now();
-      
+
       let parsedBody;
       if (request.method !== 'GET' && request.body) {
         try {
@@ -48,7 +48,7 @@ function App() {
       });
 
       const endTime = performance.now();
-      
+
       const responseHeaders: Record<string, string> = {};
       response.headers.forEach((value, key) => {
         responseHeaders[key] = value;
@@ -130,7 +130,7 @@ function App() {
   const handleUpdateDocumentation = (documentation: Documentation) => {
     if (selectedRequest) {
       const updatedRequest = { ...selectedRequest, documentation };
-      setSavedRequests(savedRequests.map(req => 
+      setSavedRequests(savedRequests.map(req =>
         req.id === selectedRequest.id ? updatedRequest : req
       ));
       setSelectedRequest(updatedRequest);
@@ -156,7 +156,7 @@ function App() {
   };
 
   const updateRequest = (index: number, request: RequestMethod) => {
-    setActiveRequests(activeRequests.map((req, i) => 
+    setActiveRequests(activeRequests.map((req, i) =>
       i === index ? request : req
     ));
   };
@@ -180,13 +180,17 @@ function App() {
         <div className="max-w-7xl mx-auto  px-4 py-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
             <div className='flex items-center space-x-4'>
-            <ShieldCheck className="h-8 w-8 text-primary" />
-            <h1 className="text-2xl font-bold text-white">
-              API Testing Workbench
-            </h1>
+              <ShieldCheck className="h-8 w-8 text-primary" />
+              <h1 className="text-2xl font-bold text-white">
+                API Testing Workbench
+              </h1>
             </div>
-            <a href="https://www.linkedin.com/in/ritikpal" target="_blank" rel="noopener noreferrer">
-            <Linkedin className="h-6 w-6 " ></Linkedin>
+            <a href="https://x.com/ritikpaltech" target="_blank" rel="noopener noreferrer">
+              <span className="h-8 w-8 bg-red" >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-twitter-x" viewBox="0 0 16 16">
+  <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865z"/>
+</svg>
+              </span>
             </a>
 
           </div>
@@ -224,7 +228,7 @@ function App() {
                 )}
               </div>
             ))}
-            
+
             <div className="flex justify-between items-center">
               <button
                 onClick={addRequest}
@@ -233,7 +237,7 @@ function App() {
                 <Plus size={16} />
                 <span>Add Request</span>
               </button>
-              
+
               {activeRequests.length > 1 && (
                 <button
                   onClick={handleCompare}
@@ -269,11 +273,10 @@ function App() {
                       setActiveRequests([...activeRequests, saved.request]);
                       handleSend(saved.request, index);
                     }}
-                    className={`w-full text-left p-3 rounded-md transition-colors ${
-                      selectedRequest?.id === saved.id 
-                        ? 'bg-primary/10 border border-primary/20' 
+                    className={`w-full text-left p-3 rounded-md transition-colors ${selectedRequest?.id === saved.id
+                        ? 'bg-primary/10 border border-primary/20'
                         : 'hover:bg-secondary'
-                    }`}
+                      }`}
                   >
                     <div className="font-medium text-white">
                       {saved.name}
