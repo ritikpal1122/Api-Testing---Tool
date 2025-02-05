@@ -167,7 +167,7 @@ function App() {
         <title>API Testing Workbench - Test, Document, and Compare APIs</title>
         <meta name="description" content="A powerful tool for testing, documenting, and comparing API requests. Features include request comparison, documentation management, and multiple format exports." />
         <meta name="keywords" content="API testing, API documentation, REST client, API workbench, API comparison tool, developer tools" />
-        <link rel="canonical" href="" />
+        <link rel="canonical" href="https://api-testing-teal.vercel.app/" />
         <meta property="og:title" content="API Testing Workbench" />
         <meta property="og:description" content="A powerful tool for testing, documenting, and comparing API requests" />
         <meta property="og:type" content="website" />
