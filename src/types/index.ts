@@ -3,6 +3,7 @@ export interface RequestMethod {
   url: string;
   headers: Record<string, string>;
   body?: string;
+  contentType: string;
 }
 
 export interface ResponseData {

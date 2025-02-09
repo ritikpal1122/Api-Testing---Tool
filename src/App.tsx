@@ -4,7 +4,7 @@ import { RequestPanel } from './components/RequestPanel';
 import { ResponsePanel } from './components/ResponsePanel';
 import { DocumentationPanel } from './components/DocumentationPanel';
 import { ComparisonPanel } from './components/ComparisonPanel';
-import { Boxes, Github, Linkedin, Plus, ShieldCheck, X } from 'lucide-react';
+import { Boxes, Github, Plus, X } from 'lucide-react';
 import type { RequestMethod, ResponseData, SavedRequest, ErrorData, Documentation, ComparisonResult } from './types';
 
 function App() {
@@ -13,10 +13,11 @@ function App() {
   const [selectedRequest, setSelectedRequest] = useState<SavedRequest | null>(null);
   const [comparisons, setComparisons] = useState<ComparisonResult[]>([]);
   const [activeRequests, setActiveRequests] = useState<RequestMethod[]>([{
-    method: 'GET',
+    method: 'POST',
     url: '',
     headers: {},
-    body: ''
+    body: '',
+    contentType: 'application/json'
   }]);
 
   const handleSend = async (request: RequestMethod, index: number) => {
@@ -29,22 +30,45 @@ function App() {
 
       const startTime = performance.now();
 
-      let parsedBody;
+      let requestBody: string | FormData | URLSearchParams | undefined;
+
       if (request.method !== 'GET' && request.body) {
-        try {
-          parsedBody = JSON.parse(request.body);
-        } catch (e) {
-          throw new Error('Invalid JSON in request body');
+        switch (request.contentType) {
+          case 'application/json':
+            requestBody = request.body;
+            break;
+          case 'application/x-www-form-urlencoded':
+            const params = new URLSearchParams();
+            request.body.split('&').forEach(pair => {
+              const [key, value] = pair.split('=');
+              if (key && value) params.append(key, value);
+            });
+            requestBody = params;
+            break;
+          case 'multipart/form-data':
+            const formData = new FormData();
+            request.body.split('\n').forEach(line => {
+              const [key, value] = line.split(':').map(s => s.trim());
+              if (key && value) formData.append(key, value);
+            });
+            requestBody = formData;
+            break;
+          default:
+            requestBody = request.body;
         }
       }
 
       const response = await fetch(request.url, {
         method: request.method,
-        headers: {
-          ...request.headers,
-          'Content-Type': 'application/json',
-        },
-        body: parsedBody ? JSON.stringify(parsedBody) : undefined,
+        headers: request.contentType === 'multipart/form-data'
+          ? request.headers
+          : {
+            ...request.headers,
+            'Content-Type': request.contentType,
+          },
+        body: requestBody instanceof FormData ? requestBody :
+          requestBody instanceof URLSearchParams ? requestBody.toString() :
+            requestBody ? requestBody : undefined,
       });
 
       const endTime = performance.now();
@@ -79,8 +103,6 @@ function App() {
         errorMessage = error.message;
         if (error.message === 'Failed to fetch') {
           errorDetails = 'Network error or CORS issue. Make sure the URL is correct and accessible.';
-        } else if (error.message === 'Invalid JSON in request body') {
-          errorDetails = 'Please check your JSON syntax in the request body.';
         }
       }
 
@@ -138,14 +160,15 @@ function App() {
   };
 
   const addRequest = () => {
-    // if (activeRequests.length >= 10) return;
     setActiveRequests([...activeRequests, {
       method: 'GET',
       url: '',
       headers: {},
-      body: ''
+      body: '',
+      contentType: 'application/json'
     }]);
   };
+
   const removeRequest = (index: number) => {
     setActiveRequests(activeRequests.filter((_, i) => i !== index));
     setResponses(prev => {
@@ -167,7 +190,7 @@ function App() {
         <title>API Testing Workbench - Test, Document, and Compare APIs</title>
         <meta name="description" content="A powerful tool for testing, documenting, and comparing API requests. Features include request comparison, documentation management, and multiple format exports." />
         <meta name="keywords" content="API testing, API documentation, REST client, API workbench, API comparison tool, developer tools" />
-        <link rel="canonical" href="https://api-testing-teal.vercel.app/" />
+        <link rel="canonical" href="https://api-workbench.stackblitz.com" />
         <meta property="og:title" content="API Testing Workbench" />
         <meta property="og:description" content="A powerful tool for testing, documenting, and comparing API requests" />
         <meta property="og:type" content="website" />
@@ -176,28 +199,27 @@ function App() {
         <meta name="twitter:description" content="A powerful tool for testing, documenting, and comparing API requests" />
       </Helmet>
 
-      <header className="bg-secondary-light border-b border-gray-800">
-        <div className="max-w-7xl mx-auto  px-4 py-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center">
-            <div className='flex items-center space-x-4'>
-              <ShieldCheck className="h-8 w-8 text-primary" />
+      <header className="bg-secondary-light fixed w-full top-0 z-50  border-b border-gray-800">
+        <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center space-x-4">
+            <span className='flex  items-center gap-2'><Boxes className="h-8 w-8 text-primary" />
               <h1 className="text-2xl font-bold text-white">
                 API Testing Workbench
-              </h1>
-            </div>
-            <a href="https://x.com/ritikpaltech" target="_blank" rel="noopener noreferrer">
-              <span className="h-8 w-8 bg-red" >
+              </h1></span>
+            <span className='cursor-pointer hover:text-primary transition-colors' >
+              <a href="https://x.com/ritikpaltech" target="_blank" rel="noopener noreferrer">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-twitter-x" viewBox="0 0 16 16">
                   <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865z" />
                 </svg>
-              </span>
-            </a>
+              </a>
+            </span>
 
           </div>
+
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 pb-24">
+      <main className="max-w-7xl pb-[100px] pt-28 mx-auto px-4 py-6 sm:px-6 lg:px-8">
         <div className="space-y-6">
           <div className="space-y-4">
             {activeRequests.map((request, index) => (
@@ -232,10 +254,10 @@ function App() {
             <div className="flex justify-between items-center">
               <button
                 onClick={addRequest}
-                className={`px-4 py-2 text-primary hover:text-primary-dark flex items-center space-x-2 ${activeRequests.length >= 10 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                className="px-4 py-2 text-primary hover:text-primary-dark flex items-center space-x-2"
               >
                 <Plus size={16} />
-                <span>Add Request </span>
+                <span>Add Request</span>
               </button>
 
               {activeRequests.length > 1 && (
@@ -313,11 +335,11 @@ function App() {
         </div>
       </main>
 
-      <footer className="bg-secondary-light border-t border-gray-800 py-6 mt-12 fixed w-full bottom-0">
+      <footer className="bg-secondary-light fixed w-full bottom-0 border-t border-gray-800 py-6 mt-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
             <p className="text-gray-400">
-              Made by <span className="text-primary"><a href="https://x.com/ritikpaltech">Ritik Pal</a></span>
+              Made by <span className="text-primary">Ritik Pal</span>
             </p>
             <a
               href="https://github.com/ritikpal1122"
